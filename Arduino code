@@ -129,6 +129,15 @@ String relayState(int numRelay){
   return "";
 }
 
+// Set your Static IP address
+IPAddress local_IP(192, 168, 1, 172);
+// Set your Gateway IP address
+IPAddress gateway(192, 168, 1, 1);
+
+IPAddress subnet(255, 255, 0, 0);
+IPAddress primaryDNS(8, 8, 8, 8);   //optional
+IPAddress secondaryDNS(8, 8, 4, 4); //optional
+
 void setup()
 {
   Serial.begin(115200);
@@ -142,8 +151,12 @@ void setup()
     }
   }
   preferences.begin("wifi_access", false);
-//  preferences.remove("pref_ssid");
-//  preferences.remove("pref_pass");
+  //  preferences.remove("pref_ssid");
+  //  preferences.remove("pref_pass");
+  // Configures static IP address
+  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+    Serial.println("STA Failed to configure");
+  }
   if (!init_wifi()) { // Connect to Wi-Fi fails
     SerialBT.register_callback(callback);
   } else {
